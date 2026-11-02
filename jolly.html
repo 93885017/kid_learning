@@ -41,37 +41,43 @@
     <main class="max-w-4xl mx-auto px-4">
         <section class="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <h2 class="text-sm uppercase tracking-widest font-bold mb-4 text-center text-slate-400">Choose a Letter / Sound</h2>
-            <div id="letterSelector" class="flex flex-wrap justify-center gap-2 md:gap-3 max-h-60 overflow-y-auto p-2"></div>
+            <div id="letterSelector" class="flex flex-wrap justify-center gap-2 md:gap-3 max-h-64 overflow-y-auto p-2"></div>
         </section>
 
         <div class="space-y-8">
             <div class="text-center">
                 <h2 class="text-5xl font-black text-slate-800 flex items-center justify-center gap-3">
-                    Letter <span id="currentLetterDisplay" class="px-6 py-2 rounded-2xl text-white shadow-xl bg-rose-500">M</span>
+                    Sound <span id="currentLetterDisplay" class="px-6 py-2 rounded-2xl text-white shadow-xl bg-rose-500">a</span>
                 </h2>
             </div>
 
             <article id="songSection" class="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100">
                 <div class="bg-blue-50 py-4 px-6 flex items-center gap-3">
                     <div class="p-2 bg-blue-100 rounded-lg text-blue-600"><i data-lucide="music"></i></div>
-                    <h3 class="text-xl font-bold text-blue-900">Step 1: Sing Together</h3>
+                    <h3 class="text-xl font-bold text-blue-900">Step 1: Sing the Song</h3>
                 </div>
                 <div class="p-6">
                     <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-inner bg-slate-100">
                         <iframe id="songFrame" class="absolute top-0 left-0 w-full h-full" src="" title="Song" allowFullScreen></iframe>
                     </div>
+                    <a id="songLink" href="#" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center w-full py-3 px-4 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-xl font-semibold transition-colors shadow-sm">
+                        Watch Song on YouTube App
+                    </a>
                 </div>
             </article>
 
             <article id="bookSection" class="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100">
                 <div class="bg-emerald-50 py-4 px-6 flex items-center gap-3">
                     <div class="p-2 bg-emerald-100 rounded-lg text-emerald-600"><i data-lucide="book-open"></i></div>
-                    <h3 class="text-xl font-bold text-emerald-900">Step 2: Read Story</h3>
+                    <h3 class="text-xl font-bold text-emerald-900">Step 2: Watch the Story</h3>
                 </div>
                 <div class="p-6">
                     <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-inner bg-slate-100">
                         <iframe id="bookFrame" class="absolute top-0 left-0 w-full h-full" src="" title="Story" allowFullScreen></iframe>
                     </div>
+                    <a id="bookLink" href="#" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center w-full py-3 px-4 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 rounded-xl font-semibold transition-colors shadow-sm">
+                        Watch Story on YouTube App
+                    </a>
                 </div>
             </article>
 
@@ -86,40 +92,44 @@
     </main>
 
     <script>
-        // Full list of 31 sounds with Jolly Phonics video IDs from specific channels
-        // Songs: @jollylearning & @jollyswit6312 | Stories: @jollyswit6312 & Smart Minds Academy
+        // Exact 36 active sounds mapped with 1 song and 1 story from your verified table
         const phonicsData = {
-            'm': { songId: 'LLbl1-X1R7w', bookId: '1LQKdiQWcT0', color: 'bg-rose-500', ring: 'ring-rose-200' },
-            'a': { songId: 'pBKD5yvdkgw', bookId: '1MuG-XjItWM', color: 'bg-red-400', ring: 'ring-red-200' },
-            's': { songId: 'FkPfv-6WfDw', bookId: 'umK3DIBXcqk', color: 'bg-orange-500', ring: 'ring-orange-200' },
-            'd': { songId: 'cCbAgTJ0Oso', bookId: 'fXDUs3-dQ8w', color: 'bg-amber-500', ring: 'ring-amber-200' },
-            't': { songId: '_Aar8ntUdgw', bookId: 'rdNL_qbTgZ8', color: 'bg-yellow-500', ring: 'ring-yellow-200' },
-            'i': { songId: 'aA8DlqJZqHE', bookId: 'pNwGAv9CCCY', color: 'bg-lime-500', ring: 'ring-lime-200' },
-            'n': { songId: 'FPa-3VXg6aE', bookId: 'PvyTCoBVGOE', color: 'bg-green-500', ring: 'ring-green-200' },
-            'p': { songId: 'TsUMef9W1f8', bookId: 'iqTDeaqit9k', color: 'bg-emerald-500', ring: 'ring-emerald-200' },
-            'g': { songId: 'P41e1otuwQQ', bookId: 'rdNL_qbTgZ8', color: 'bg-teal-500', ring: 'ring-teal-200' },
-            'o': { songId: 'FPa-3VXg6aE', bookId: 'vwC0Wo6xCkU', color: 'bg-cyan-500', ring: 'ring-cyan-200' },
-            'c': { songId: 'yVyry9jpVjI', bookId: 'NiKBHhvSJxU', color: 'bg-sky-500', ring: 'ring-sky-200' },
-            'k': { songId: 'k79B0IY3ZyI', bookId: 'LLbl1-X1R7w', color: 'bg-blue-500', ring: 'ring-blue-200' },
-            'u': { songId: 'Z4Hp2Z_dgRE', bookId: 'R35idbRgi0w', color: 'bg-indigo-500', ring: 'ring-indigo-200' },
-            'b': { songId: 'dvueijPV6ro', bookId: 'RWw5QKpBa4k', color: 'bg-violet-500', ring: 'ring-violet-200' },
-            'f': { songId: 'htzpOmcGLEs', bookId: 'sLO1IKmqdmw', color: 'bg-purple-500', ring: 'ring-purple-200' },
-            'e': { songId: 'VM0iramob1k', bookId: 'vgkbDXqRa70', color: 'bg-fuchsia-500', ring: 'ring-fuchsia-200' },
-            'l': { songId: 'TOBufxwa4v8', bookId: '2CQukvtn7ZI', color: 'bg-pink-500', ring: 'ring-pink-200' },
-            'h': { songId: 'M-rhU-86ktw', bookId: 'VDpIkFD13go', color: 'bg-rose-400', ring: 'ring-rose-200' },
-            'sh': { songId: 'Ko37jJdv67w', bookId: 'ip0NOPZRSOk', color: 'bg-red-500', ring: 'ring-red-200' },
-            'r': { songId: '3M0VZGqREgs', bookId: '1MuG-XjItWM', color: 'bg-orange-400', ring: 'ring-orange-200' },
-            'j': { songId: 'Ko37jJdv67w', bookId: '7FYxwlKH4a8', color: 'bg-amber-400', ring: 'ring-amber-200' },
-            'v': { songId: 'cmxYN5HeMhg', bookId: 'MpIsZc3_LrY', color: 'bg-yellow-400', ring: 'ring-yellow-200' },
-            'y': { songId: 'C2mNgswvS6o', bookId: 'fXDUs3-dQ8w', color: 'bg-lime-400', ring: 'ring-lime-200' },
-            'w': { songId: 'sj2uS4mAlU8', bookId: '_Aar8ntUdgw', color: 'bg-emerald-400', ring: 'ring-emerald-200' },
-            'th': { songId: 'swPqPN5qR08', bookId: 'UjaXD2jIq6I', color: 'bg-teal-400', ring: 'ring-teal-200' },
-            'z': { songId: '2oM4lJoNkpQ', bookId: 'HB-59wPRRfg', color: 'bg-cyan-400', ring: 'ring-cyan-200' },
-            'ch': { songId: '1MF9sHQkZ8w', bookId: 'OHWzW2Yz_lg', color: 'bg-sky-400', ring: 'ring-sky-200' },
-            'qu': { songId: 'b-iC6gBhh-4', bookId: 'NiKBHhvSJxU', color: 'bg-blue-400', ring: 'ring-blue-200' },
-            'x': { songId: 'yVyry9jpVjI', bookId: 'LLbl1-X1R7w', color: 'bg-indigo-400', ring: 'ring-indigo-200' },
-            'ng': { songId: 'k79B0IY3ZyI', bookId: '1LQKdiQWcT0', color: 'bg-violet-400', ring: 'ring-violet-200' },
-            'nk': { songId: 'WFMI-cV9sq8', bookId: 'ceHz3pgJx-Y', color: 'bg-purple-400', ring: 'ring-purple-200' }
+            'a': { songId: 'wUi8zdYpr6E', bookId: 'pIZMSibjw7k', color: 'bg-rose-500', ring: 'ring-rose-200' },
+            'ai': { songId: 'b7PKUE8aL4s', bookId: 'YoVMAk1BMbU', color: 'bg-red-500', ring: 'ring-red-200' },
+            'b': { songId: 'ciuQq89n2Mk', bookId: 'p8jFVaaiCro', color: 'bg-orange-500', ring: 'ring-orange-200' },
+            'c / k': { songId: 'ZXBxUCdUJrA', bookId: 'E24Pfa2-lEE', color: 'bg-amber-500', ring: 'ring-amber-200' },
+            'ch': { songId: '5H58z_QVm-w', bookId: 'OHWzW2Yz_lg', color: 'bg-yellow-500', ring: 'ring-yellow-200' },
+            'd': { songId: 'JEpBGhRB2LE', bookId: 'Qq2sILz4Vto', color: 'bg-lime-500', ring: 'ring-lime-200' },
+            'e': { songId: 'CTcsDauRaEk', bookId: 'lFEfGhMsofI', color: 'bg-green-500', ring: 'ring-green-200' },
+            'ee / or': { songId: 'SWfx4C-oA9g', bookId: '-pcbz1WXX8Y', color: 'bg-emerald-500', ring: 'ring-emerald-200' },
+            'er': { songId: 'VskkuZ18wZ8', bookId: 'dyRXPLMZx1I', color: 'bg-teal-500', ring: 'ring-teal-200' },
+            'f': { songId: 'i1f6H2OJzSg', bookId: 'viQ3oEle2-k', color: 'bg-cyan-500', ring: 'ring-cyan-200' },
+            'g': { songId: 'vHAn45hdNHA', bookId: 'iEXo_hb9-r0', color: 'bg-sky-500', ring: 'ring-sky-200' },
+            'h': { songId: '2by7CHypj5A', bookId: 'xtT4aIIJdII', color: 'bg-blue-500', ring: 'ring-blue-200' },
+            'i': { songId: 'eMU-J88bt1Q', bookId: 'vcCPx70IpEA', color: 'bg-indigo-500', ring: 'ring-indigo-200' },
+            'ie': { songId: 'SKv2Xwmzoj0', bookId: 'P9TWj-_Co0k', color: 'bg-violet-500', ring: 'ring-violet-200' },
+            'j': { songId: 'hHbTRh1TULs', bookId: '8xNTyHa-_MY', color: 'bg-purple-500', ring: 'ring-purple-200' },
+            'l': { songId: 'QllJeg6DlM8', bookId: 'bYNDcdj852Q', color: 'bg-fuchsia-500', ring: 'ring-fuchsia-200' },
+            'm': { songId: 'JSV-TAlSgt8', bookId: '1ParIb1fqKo', color: 'bg-pink-500', ring: 'ring-pink-200' },
+            'n': { songId: 'J7FVg2Sic2s', bookId: 'PvyTCoBVGOE', color: 'bg-rose-400', ring: 'ring-rose-200' },
+            'ng': { songId: '27K5t7YaFcY', bookId: 'qIarSNiUkr0', color: 'bg-red-400', ring: 'ring-red-200' },
+            'o': { songId: 'zDmtHnIxjmI', bookId: 'uRomEEt7pzo', color: 'bg-orange-400', ring: 'ring-orange-200' },
+            'oa': { songId: 'bMzyyw7HgMU', bookId: 'idlcV09oJlU', color: 'bg-amber-400', ring: 'ring-amber-200' },
+            'oo': { songId: 'gd6rvzc_Nhs', bookId: 'Tv6B5ohgGqk', color: 'bg-yellow-400', ring: 'ring-yellow-200' },
+            'ou': { songId: 'kPJZ9MGi-O8', bookId: '5aJPNzkc6J0', color: 'bg-lime-400', ring: 'ring-lime-200' },
+            'p': { songId: 'Lr_ElKRc348', bookId: 'pLvC9-SvIfA', color: 'bg-green-400', ring: 'ring-green-200' },
+            'qu': { songId: 'aurzlkmeuPc', bookId: 'z_8jX94zVfI', color: 'bg-emerald-400', ring: 'ring-emerald-200' },
+            'r': { songId: '2M1dz6Ez_BI', bookId: 'sI0gVpccjnA', color: 'bg-teal-400', ring: 'ring-teal-200' },
+            's': { songId: 'MOR_plE3YI4', bookId: 'rqR6WAS2eQk', color: 'bg-cyan-400', ring: 'ring-cyan-200' },
+            'sh': { songId: 'LXY01KIykkI', bookId: 'es-tgnD_rTQ', color: 'bg-sky-400', ring: 'ring-sky-200' },
+            't': { songId: '3p6Qr5ZNhqc', bookId: 'rK6-Grv8fKA', color: 'bg-blue-400', ring: 'ring-blue-200' },
+            'th': { songId: '--toC1kTAzk', bookId: 'UjaXD2jIq6I', color: 'bg-indigo-400', ring: 'ring-indigo-200' },
+            'u': { songId: 'Z4Hp2Z_dgRE', bookId: 'lTpyibZcAbA', color: 'bg-violet-400', ring: 'ring-violet-200' },
+            'v': { songId: 'pU2ZYLzJCoY', bookId: 'xCcejbZvqhw', color: 'bg-purple-400', ring: 'ring-purple-200' },
+            'w': { songId: 'wceITcIOmEo', bookId: 'qdPuxu1a1xM', color: 'bg-fuchsia-400', ring: 'ring-fuchsia-200' },
+            'x': { songId: 'XUjzprQsNSQ', bookId: 'qVjeA6EA3xA', color: 'bg-pink-400', ring: 'ring-pink-200' },
+            'y': { songId: '9bMHn0-fYw8', bookId: 'ifuAsmTG0Vc', color: 'bg-rose-600', ring: 'ring-rose-200' },
+            'z': { songId: 'AGIx17w5IX8', bookId: 'p0WSvtJy1Ho', color: 'bg-red-600', ring: 'ring-red-200' }
         };
 
         function updateUI(letter) {
@@ -130,27 +140,30 @@
             display.textContent = letter;
             display.className = `px-6 py-2 rounded-2xl text-white shadow-xl ${data.color}`;
             
-            // Update Iframes
+            // Update Iframes & Direct App Links
             document.getElementById('songFrame').src = `https://www.youtube.com/embed/${data.songId}`;
+            document.getElementById('songLink').href = `https://www.youtube.com/watch?v=${data.songId}`;
+            
             document.getElementById('bookFrame').src = `https://www.youtube.com/embed/${data.bookId}`;
+            document.getElementById('bookLink').href = `https://www.youtube.com/watch?v=${data.bookId}`;
 
             // Update active state of buttons
             document.querySelectorAll('.letter-btn').forEach(btn => {
                 const btnLetter = btn.getAttribute('data-letter');
                 if (btnLetter === letter) {
-                    btn.className = `letter-btn w-12 h-12 md:w-14 md:h-14 rounded-2xl text-lg md:text-xl font-bold transition-all duration-300 shadow-lg flex items-center justify-center transform scale-105 ${phonicsData[btnLetter].color} text-white ring-4 ${phonicsData[btnLetter].ring}`;
+                    btn.className = `letter-btn px-4 h-12 md:h-14 min-w-[3rem] md:min-w-[3.5rem] rounded-2xl text-lg md:text-xl font-bold transition-all duration-300 shadow-lg flex items-center justify-center transform scale-105 ${phonicsData[btnLetter].color} text-white ring-4 ${phonicsData[btnLetter].ring}`;
                 } else {
-                    btn.className = 'letter-btn w-12 h-12 md:w-14 md:h-14 rounded-2xl text-lg md:text-xl font-bold transition-all duration-300 shadow-sm flex items-center justify-center transform hover:scale-105 bg-white border-2 border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-600';
+                    btn.className = 'letter-btn px-4 h-12 md:h-14 min-w-[3rem] md:min-w-[3.5rem] rounded-2xl text-lg md:text-xl font-bold transition-all duration-300 shadow-sm flex items-center justify-center transform hover:scale-105 bg-white border-2 border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700';
                 }
             });
         }
 
         const selector = document.getElementById('letterSelector');
         
-        // Generate buttons for all 31 letters
+        // Generate buttons for all 36 active sounds
         Object.keys(phonicsData).forEach(letter => {
             const btn = document.createElement('button');
-            btn.className = 'letter-btn w-12 h-12 md:w-14 md:h-14 rounded-2xl text-lg md:text-xl font-bold transition-all duration-300 shadow-sm flex items-center justify-center transform hover:scale-105 bg-white border-2 border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-600';
+            btn.className = 'letter-btn px-4 h-12 md:h-14 min-w-[3rem] md:min-w-[3.5rem] rounded-2xl text-lg md:text-xl font-bold transition-all duration-300 shadow-sm flex items-center justify-center transform hover:scale-105 bg-white border-2 border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700';
             btn.textContent = letter;
             btn.setAttribute('data-letter', letter);
             btn.onclick = () => updateUI(letter);
@@ -159,7 +172,7 @@
 
         // Initialize icons and set default letter
         lucide.createIcons();
-        updateUI('m'); 
+        updateUI('a'); 
     </script>
 </body>
 </html>
