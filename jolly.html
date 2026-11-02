@@ -1,115 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Phonics Routine</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-900 pb-12 selection:bg-blue-100">
+import React, { useState } from 'react';
+import { Music, BookOpen, Star, Sparkles } from 'lucide-react';
 
-    <header class="bg-white shadow-sm py-6 px-6 mb-8 text-center border-b-4 border-blue-400">
-        <h1 class="text-3xl font-extrabold text-slate-800 flex items-center justify-center gap-2">
-            <i data-lucide="star" class="text-yellow-400 fill-yellow-400"></i>
-            Phonics Daily
+const phonicsData = {
+  'M': { songId: 'Nt3vnx6cnQM', bookId: 'oLP-vmFcVP4', color: 'bg-rose-500', ring: 'ring-rose-200' },
+  'A': { songId: 'GcQuunmQPwg', bookId: 'qacT3PJOYkw', color: 'bg-red-400', ring: 'ring-red-200' },
+  'S': { songId: 'ud2ZeLO6rhE', bookId: '4Y-7Fq_ImC4', color: 'bg-orange-500', ring: 'ring-orange-200' },
+  'D': { songId: 'AcGdx2afRnI', bookId: 'yGJ17WNodN0', color: 'bg-amber-500', ring: 'ring-amber-200' },
+  'T': { songId: 'TOBufxwa4v8', bookId: 'rdNL_qbTgZ8', color: 'bg-yellow-500', ring: 'ring-yellow-200' },
+  'I': { songId: 'Z4Hp2Z_dgRE', bookId: 'PhmbES7LNv8', color: 'bg-lime-500', ring: 'ring-lime-200' },
+  'N': { songId: 'FPa-3VXg6aE', bookId: 'qNY44jqo4jU', color: 'bg-green-500', ring: 'ring-green-200' },
+  'P': { songId: 'htzpOmcGLEs', bookId: 'sLO1IKmqdmw', color: 'bg-emerald-500', ring: 'ring-emerald-200' },
+  'G': { songId: 'P41e1otuwQQ', bookId: 'rdNL_qbTgZ8', color: 'bg-teal-500', ring: 'ring-teal-200' },
+  'O': { songId: 'FPa-3VXg6aE', bookId: 'qNY44jqo4jU', color: 'bg-cyan-500', ring: 'ring-cyan-200' },
+  'C': { songId: 'Z4Hp2Z_dgRE', bookId: 'PhmbES7LNv8', color: 'bg-sky-500', ring: 'ring-sky-200' },
+  'K': { songId: 'TOBufxwa4v8', bookId: '2CQukvtn7ZI', color: 'bg-blue-500', ring: 'ring-blue-200' },
+  'U': { songId: 'Z4Hp2Z_dgRE', bookId: 'PhmbES7LNv8', color: 'bg-indigo-500', ring: 'ring-indigo-200' },
+  'B': { songId: 'dvueijPV6ro', bookId: 'RWw5QKpBa4k', color: 'bg-violet-500', ring: 'ring-violet-200' },
+  'F': { songId: 'htzpOmcGLEs', bookId: 'sLO1IKmqdmw', color: 'bg-purple-500', ring: 'ring-purple-200' },
+  'E': { songId: 'P41e1otuwQQ', bookId: 'rdNL_qbTgZ8', color: 'bg-fuchsia-500', ring: 'ring-fuchsia-200' },
+  'L': { songId: 'TOBufxwa4v8', bookId: '2CQukvtn7ZI', color: 'bg-pink-500', ring: 'ring-pink-200' },
+  'H': { songId: 'dvueijPV6ro', bookId: 'RWw5QKpBa4k', color: 'bg-rose-400', ring: 'ring-rose-200' },
+  'SH': { songId: 'FPa-3VXg6aE', bookId: 'qNY44jqo4jU', color: 'bg-red-500', ring: 'ring-red-200' },
+  'R': { songId: 'Z4Hp2Z_dgRE', bookId: 'PhmbES7LNv8', color: 'bg-orange-400', ring: 'ring-orange-200' },
+  'J': { songId: 'TOBufxwa4v8', bookId: '2CQukvtn7ZI', color: 'bg-amber-400', ring: 'ring-amber-200' },
+  'V': { songId: 'htzpOmcGLEs', bookId: 'sLO1IKmqdmw', color: 'bg-yellow-400', ring: 'ring-yellow-200' },
+  'Y': { songId: 'dvueijPV6ro', bookId: 'RWw5QKpBa4k', color: 'bg-lime-400', ring: 'ring-lime-200' },
+  'W': { songId: 'P41e1otuwQQ', bookId: 'rdNL_qbTgZ8', color: 'bg-emerald-400', ring: 'ring-emerald-200' },
+  'TH': { songId: 'FPa-3VXg6aE', bookId: 'qNY44jqo4jU', color: 'bg-teal-400', ring: 'ring-teal-200' },
+  'Z': { songId: 'Z4Hp2Z_dgRE', bookId: 'PhmbES7LNv8', color: 'bg-cyan-400', ring: 'ring-cyan-200' },
+  'CH': { songId: 'TOBufxwa4v8', bookId: '2CQukvtn7ZI', color: 'bg-sky-400', ring: 'ring-sky-200' },
+  'QU': { songId: 'htzpOmcGLEs', bookId: 'sLO1IKmqdmw', color: 'bg-blue-400', ring: 'ring-blue-200' },
+  'X': { songId: 'dvueijPV6ro', bookId: 'RWw5QKpBa4k', color: 'bg-indigo-400', ring: 'ring-indigo-200' },
+  'NG': { songId: 'P41e1otuwQQ', bookId: 'rdNL_qbTgZ8', color: 'bg-violet-400', ring: 'ring-violet-200' },
+  'NK': { songId: 'FPa-3VXg6aE', bookId: 'qNY44jqo4jU', color: 'bg-purple-400', ring: 'ring-purple-200' }
+};
+
+export default function App() {
+  const [activeLetter, setActiveLetter] = useState('M');
+  const currentData = phonicsData[activeLetter] || phonicsData['M'];
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12 selection:bg-blue-100">
+      {/* Header section */}
+      <header className="bg-white shadow-sm py-6 px-6 mb-8 text-center border-b-4 border-blue-400">
+        <h1 className="text-3xl font-extrabold text-slate-800 flex items-center justify-center gap-2">
+          <Star className="text-yellow-400 fill-yellow-400" />
+          Phonics Daily
         </h1>
-        <p class="text-slate-500 mt-2 font-medium">Select a letter to begin today's adventure!</p>
-    </header>
+        <p className="text-slate-500 mt-2 font-medium">Select a letter to begin today's adventure!</p>
+      </header>
 
-    <main class="max-w-3xl mx-auto px-4">
-        <section class="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-            <h2 class="text-sm uppercase tracking-widest font-bold mb-4 text-center text-slate-400">Choose a Letter</h2>
-            <div id="letterSelector" class="flex flex-wrap justify-center gap-3"></div>
+      <main className="max-w-4xl mx-auto px-4">
+        {/* Letter Selector */}
+        <section className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+          <h2 className="text-sm uppercase tracking-widest font-bold mb-4 text-center text-slate-400">Choose a Letter / Sound</h2>
+          <div className="flex flex-wrap justify-center gap-2 md:gap-3 max-h-60 overflow-y-auto p-2">
+            {Object.keys(phonicsData).map((letter) => (
+              <button
+                key={letter}
+                onClick={() => setActiveLetter(letter)}
+                className={`
+                  w-12 h-12 md:w-14 md:h-14 rounded-2xl text-lg md:text-xl font-bold transition-all duration-300 shadow-sm
+                  flex items-center justify-center transform hover:scale-105
+                  ${activeLetter === letter 
+                    ? `${phonicsData[letter].color} text-white shadow-lg ring-4 ${phonicsData[letter].ring}` 
+                    : 'bg-white border-2 border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700'}
+                `}
+              >
+                {letter}
+              </button>
+            ))}
+          </div>
         </section>
 
-        <div class="space-y-8">
-            <div class="text-center">
-                <h2 class="text-5xl font-black text-slate-800 flex items-center justify-center gap-3">
-                    Letter <span id="currentLetterDisplay" class="px-6 py-2 rounded-2xl text-white shadow-xl bg-red-400">G</span>
-                </h2>
+        {/* Content Area */}
+        <div className="space-y-8">
+          <div className="text-center">
+            <h2 className="text-5xl font-black text-slate-800 flex items-center justify-center gap-3">
+              Letter <span className={`px-6 py-2 rounded-2xl text-white shadow-xl ${currentData.color}`}>{activeLetter}</span>
+            </h2>
+          </div>
+
+          {/* Step 1: Song */}
+          <article className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 transition-all">
+            <div className="bg-blue-50 py-4 px-6 flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg text-blue-600"><Music size={24} /></div>
+              <h3 className="text-xl font-bold text-blue-900">Step 1: Sing Together</h3>
             </div>
+            <div className="p-6">
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-inner bg-slate-100 mb-4">
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full"
+                  src={`https://www.youtube.com/embed/${currentData.songId}`}
+                  title="Song"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+          </article>
 
-            <article id="songSection" class="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100">
-                <div class="bg-blue-50 py-4 px-6 flex items-center gap-3">
-                    <div class="p-2 bg-blue-100 rounded-lg text-blue-600"><i data-lucide="music"></i></div>
-                    <h3 class="text-xl font-bold text-blue-900">Step 1: Sing Together</h3>
-                </div>
-                <div class="p-6">
-                    <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-inner bg-slate-100">
-                        <iframe id="songFrame" class="absolute top-0 left-0 w-full h-full" src="" title="Song" allowFullScreen></iframe>
-                    </div>
-                </div>
-            </article>
+          {/* Step 2: Book */}
+          <article className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100">
+            <div className="bg-emerald-50 py-4 px-6 flex items-center gap-3">
+              <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600"><BookOpen size={24} /></div>
+              <h3 className="text-xl font-bold text-emerald-900">Step 2: Read Story</h3>
+            </div>
+            <div className="p-6">
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-inner bg-slate-100 mb-4">
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full"
+                  src={`https://www.youtube.com/embed/${currentData.bookId}`}
+                  title="Story"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+          </article>
 
-            <article id="bookSection" class="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100">
-                <div class="bg-emerald-50 py-4 px-6 flex items-center gap-3">
-                    <div class="p-2 bg-emerald-100 rounded-lg text-emerald-600"><i data-lucide="book-open"></i></div>
-                    <h3 class="text-xl font-bold text-emerald-900">Step 2: Read Story</h3>
-                </div>
-                <div class="p-6">
-                    <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-inner bg-slate-100">
-                        <iframe id="bookFrame" class="absolute top-0 left-0 w-full h-full" src="" title="Story" allowFullScreen></iframe>
-                    </div>
-                </div>
-            </article>
-
-            <footer class="bg-gradient-to-r from-amber-100 to-orange-100 rounded-3xl p-6 flex items-center justify-center gap-4 text-center border border-amber-200">
-                <i data-lucide="sparkles" class="text-amber-500 animate-pulse"></i>
-                <div>
-                    <h4 class="text-xl font-bold text-amber-900">Great job today!</h4>
-                    <p class="text-amber-800 text-sm">Keep practicing, you're doing amazing!</p>
-                </div>
-            </footer>
+          {/* Completion Footer */}
+          <footer className="bg-gradient-to-r from-amber-100 to-orange-100 rounded-3xl p-6 flex items-center justify-center gap-4 text-center border border-amber-200">
+            <Sparkles className="text-amber-500 animate-pulse" size={40} />
+            <div>
+              <h4 className="text-xl font-bold text-amber-900">Great job today!</h4>
+              <p className="text-amber-800 text-sm">Keep practicing, you're doing amazing!</p>
+            </div>
+          </footer>
         </div>
-    </main>
-
-    <script>
-        const phonicsData = {
-            'G': { songId: 'P41e1otuwQQ', bookId: 'rdNL_qbTgZ8', color: 'bg-red-400', ring: 'ring-red-200' },
-            'O': { songId: 'FPa-3VXg6aE', bookId: 'qNY44jqo4jU', color: 'bg-orange-400', ring: 'ring-orange-200' },
-            'U': { songId: 'Z4Hp2Z_dgRE', bookId: 'PhmbES7LNv8', color: 'bg-yellow-400', ring: 'ring-yellow-200' },
-            'L': { songId: 'TOBufxwa4v8', bookId: '2CQukvtn7ZI', color: 'bg-green-400', ring: 'ring-green-200' },
-            'F': { songId: 'htzpOmcGLEs', bookId: 'sLO1IKmqdmw', color: 'bg-blue-400', ring: 'ring-blue-200' },
-            'B': { songId: 'dvueijPV6ro', bookId: 'RWw5QKpBa4k', color: 'bg-purple-400', ring: 'ring-purple-200' },
-        };
-
-        function updateUI(letter) {
-            const data = phonicsData[letter];
-            const display = document.getElementById('currentLetterDisplay');
-            
-            display.textContent = letter;
-            display.className = `px-6 py-2 rounded-2xl text-white shadow-xl ${data.color}`;
-            
-            document.getElementById('songFrame').src = `https://www.youtube.com/embed/${data.songId}`;
-            document.getElementById('bookFrame').src = `https://www.youtube.com/embed/${data.bookId}`;
-
-            document.querySelectorAll('.letter-btn').forEach(btn => {
-                const btnLetter = btn.getAttribute('data-letter');
-                if (btnLetter === letter) {
-                    btn.className = `letter-btn w-14 h-14 md:w-16 md:h-16 rounded-2xl text-2xl font-bold transition-all duration-300 shadow-lg flex items-center justify-center transform scale-105 ${phonicsData[btnLetter].color} text-white ring-4 ${phonicsData[btnLetter].ring}`;
-                } else {
-                    btn.className = 'letter-btn w-14 h-14 md:w-16 md:h-16 rounded-2xl text-2xl font-bold transition-all duration-300 shadow-sm flex items-center justify-center transform hover:scale-105 bg-white border-2 border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-600';
-                }
-            });
-        }
-
-        const selector = document.getElementById('letterSelector');
-        Object.keys(phonicsData).forEach(letter => {
-            const btn = document.createElement('button');
-            btn.className = 'letter-btn w-14 h-14 md:w-16 md:h-16 rounded-2xl text-2xl font-bold transition-all duration-300 shadow-sm flex items-center justify-center transform hover:scale-105 bg-white border-2 border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-600';
-            btn.textContent = letter;
-            btn.setAttribute('data-letter', letter);
-            btn.onclick = () => updateUI(letter);
-            selector.appendChild(btn);
-        });
-
-        lucide.createIcons();
-        updateUI('G');
-    </script>
-</body>
-</html>
+      </main>
+    </div>
+  );
+}
